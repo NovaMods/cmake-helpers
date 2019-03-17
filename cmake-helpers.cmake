@@ -4,6 +4,7 @@ include("${CMAKE_CURRENT_LIST_DIR}/cotire/cotire.cmake")
 
 include("${CMAKE_CURRENT_LIST_DIR}/tooling/clang-format.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/tooling/clang-tidy.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/tooling/coverage.cmake")
 
 find_package(Sanitizers REQUIRED)
 
