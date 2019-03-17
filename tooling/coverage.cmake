@@ -55,10 +55,14 @@ include(CMakeParseArguments)
 
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "(Apple)?[Cc]lang")
     if("${CMAKE_CXX_COMPILER_VERSION}" VERSION_LESS 3)
-        message(FATAL_ERROR "Clang version must be 3.0.0 or greater! Aborting...")
+        message(STATUS "Clang version must be 3.0.0 or greater! Disabling coverage.")
+        function(target_coverage)
+        endfunction()
     endif()
 elseif(NOT CMAKE_COMPILER_IS_GNUCXX)
-    message(FATAL_ERROR "Compiler is not GNU gcc! Aborting...")
+    message(STATUS "Compiler is not GNU gcc! Disabling coverage.")
+    function(target_coverage)
+    endfunction()
 endif()
 
 set(COVERAGE_COMPILER_FLAGS "-g -O0 --coverage -fprofile-arcs -ftest-coverage"
