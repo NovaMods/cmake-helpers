@@ -58,11 +58,13 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "(Apple)?[Cc]lang")
         message(STATUS "Clang version must be 3.0.0 or greater! Disabling coverage.")
         function(target_coverage)
         endfunction()
+        return()
     endif()
 elseif(NOT CMAKE_COMPILER_IS_GNUCXX)
     message(STATUS "Compiler is not GNU gcc! Disabling coverage.")
     function(target_coverage)
     endfunction()
+    return()
 endif()
 
 set(COVERAGE_COMPILER_FLAGS "-g -O0 --coverage -fprofile-arcs -ftest-coverage"
