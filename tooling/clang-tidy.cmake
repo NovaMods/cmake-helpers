@@ -55,7 +55,7 @@ endif()
 function(enable_linting)
     set(_args ${ARGN})
 
-    if("${ARGC}"" LESS 1)
+    if("${ARGC}" LESS 1)
         message(FATAL_ERROR "Linting must lint at least one folder")
     endif()
 
