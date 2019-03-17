@@ -1,9 +1,11 @@
-set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_CURRENT_LIST_DIR}/modules")
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_CURRENT_LIST_DIR}/modules" "${CMAKE_CURRENT_LIST_DIR}/sanitizers")
 
 include("${CMAKE_CURRENT_LIST_DIR}/cotire/cotire.cmake")
 
 include("${CMAKE_CURRENT_LIST_DIR}/tooling/clang-format.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/tooling/clang-tidy.cmake")
+
+find_package(Sanitizers REQUIRED)
 
 include("${CMAKE_CURRENT_LIST_DIR}/utilities/compile-options-if-supported.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/utilities/include-target.cmake")
