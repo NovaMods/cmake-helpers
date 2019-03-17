@@ -41,7 +41,7 @@ foreach(PATH ${CLANG_FORMAT_PATHS})
     message(STATUS "Found .clang-format at ${PATH}")
 endforeach()
 
-function(format TARGET)
+function(target_format TARGET)
     list(APPEND TOUCH_PATHS)
 
     get_property(TARGET_SOURCES TARGET ${TARGET} PROPERTY SOURCES)
