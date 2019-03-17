@@ -3556,7 +3556,7 @@ function (cotire_setup_clean_all_target)
 	endif()
 endfunction()
 
-function (cotire)
+function (target_cotire)
 	set(_options "")
 	set(_oneValueArgs "")
 	set(_multiValueArgs LANGUAGES CONFIGURATIONS)
