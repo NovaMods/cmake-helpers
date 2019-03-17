@@ -10,5 +10,6 @@ find_package(Sanitizers REQUIRED)
 
 include("${CMAKE_CURRENT_LIST_DIR}/utilities/compile-options-if-supported.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/utilities/include-target.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/utilities/os.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/utilities/remove-permissive.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/utilities/target-includes-system.cmake")
