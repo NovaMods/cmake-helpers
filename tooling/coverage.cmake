@@ -103,7 +103,7 @@ else()
 endif()
 
 function(target_coverage target)
-    target_compile_options(${target} ${COVERAGE_COMPILER_FLAGS})
+    target_compile_options(${target} PRIVATE ${COVERAGE_COMPILER_FLAGS})
     if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
         target_link_libraries(${target} gcov)
     else()
