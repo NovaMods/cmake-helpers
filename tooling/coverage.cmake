@@ -67,7 +67,7 @@ elseif(NOT CMAKE_COMPILER_IS_GNUCXX)
     return()
 endif()
 
-set(COVERAGE_COMPILER_FLAGS "-g -O0 --coverage -fprofile-arcs -ftest-coverage"
+set(COVERAGE_COMPILER_FLAGS "-g" "-O0" "--coverage" "-fprofile-arcs" "-ftest-coverage"
     CACHE INTERNAL "")
 
 set(CMAKE_CXX_FLAGS_COVERAGE
