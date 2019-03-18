@@ -59,13 +59,13 @@ function(target_format _target)
 
         set(_full_touch_path "${CMAKE_BINARY_DIR}/${_rel_path}.format.touch")
         get_filename_component(_touch_dir "${_full_touch_path}" DIRECTORY)
-        list(APPEND TOUCH_PATHS "${FULL_TOUCH_PATH}")
+        list(APPEND TOUCH_PATHS "${_full_touch_path}")
 
         file(MAKE_DIRECTORY "${_touch_dir}")
         add_custom_command(
-            OUTPUT "${FULL_TOUCH_PATH}"
+            OUTPUT "${_full_touch_path}"
             COMMAND "${CLANG_FORMAT_PROGRAM}" -i -style=file "${_source_file}"
-            COMMAND "${CMAKE_COMMAND}" -E touch "${FULL_TOUCH_PATH}"
+            COMMAND "${CMAKE_COMMAND}" -E touch "${_full_touch_path}"
             DEPENDS "${_full_source_paths}" ${CLANG_FORMAT_PATHS}
             COMMENT "${_source_file}"
             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
