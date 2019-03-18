@@ -67,10 +67,8 @@ function(enable_linting)
     endforeach()
 
     #remove last char
-    string(LENGTH "${_comma_separated}" _length)
-    math(EXPR _length_wo_one ${_length} - 1)
-    string(SUBSTRING "${_comma_separated}" 0 "${_length_wo_one}" _comma_separated)
-    string(SUBSTRING "${_pipe_separated}" 0 "${_length_wo_one}" _pipe_separated)
+    string(SUBSTRING "${_comma_separated}" 1 -1 _comma_separated)
+    string(SUBSTRING "${_pipe_separated}" 1 -1 _pipe_separated)
 
     set(_lint_bash_path "${CMAKE_CURRENT_BINARY_DIR}/tools/lint.bash")
 
@@ -86,12 +84,14 @@ function(enable_linting)
     message(STATUS "Linting enabled through ${CMAKE_CURRENT_BINARY_DIR}/tools/lint.bash")
 
     # targets
-    add_custom_target(lint "${_lint_bash_path}" "--sort" "file" USES_TERMINAL)
-    add_custom_target(lint-by-file "${_lint_bash_path}" "--sort" "file" USES_TERMINAL)
-    add_custom_target(lint-by-diagnostic "${_lint_bash_path}" "--sort" "diagnostic"  USES_TERMINAL)
+    if (NOT TARGET lint)
+	    add_custom_target(lint "${_lint_bash_path}" "--sort" "file" USES_TERMINAL)
+	    add_custom_target(lint-by-file "${_lint_bash_path}" "--sort" "file" USES_TERMINAL)
+	    add_custom_target(lint-by-diagnostic "${_lint_bash_path}" "--sort" "diagnostic"  USES_TERMINAL)
+	endif()
 
     # autofix
-    if(CLANG_APPLY_REPLACEMENTS_PROGRAM AND CLANG_FORMAT_PROGRAM)
+    if(CLANG_APPLY_REPLACEMENTS_PROGRAM AND CLANG_FORMAT_PROGRAM AND NOT TARGET lint)
         add_custom_target(
             lint-fix 
             COMMAND "${_lint_bash_path}" "--sort" "file" "--fix" "--clang-apply-replacements" "${CLANG_APPLY_REPLACEMENTS_PROGRAM}" 
