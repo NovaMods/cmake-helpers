@@ -41,45 +41,46 @@ foreach(PATH ${CLANG_FORMAT_PATHS})
     message(STATUS "Found .clang-format at ${PATH}")
 endforeach()
 
-function(target_format TARGET)
+function(target_format _target)
     list(APPEND TOUCH_PATHS)
 
-    get_property(TARGET_SOURCES TARGET ${TARGET} PROPERTY SOURCES)
-    get_property(TARGET_DIR TARGET ${TARGET} PROPERTY SOURCE_DIR)
-    list(APPEND FULL_SOURCES_LIST ${TARGET_SOURCES} ${ARGV1})
-    list(REMOVE_DUPLICATES FULL_SOURCES_LIST)
-    foreach(SOURCE_FILE ${FULL_SOURCES_LIST})
-        if(SOURCE_FILE MATCHES [=[^([A-Z]:)?/.*$]=])
-            set(FULL_SOURCE_PATH "${SOURCE_FILE}")
+    get_property(_target_sources TARGET ${_target} PROPERTY SOURCES)
+    list(REMOVE_ITEM _target_sources STATIC SHARED OBJECT WIN32 PUBLIC PRIVATE INTERFACE)
+    get_property(_target_dir TARGET ${_target} PROPERTY SOURCE_DIR)
+    list(APPEND _full_sources_list ${_target_sources} ${ARGV1})
+    list(REMOVE_DUPLICATES _full_sources_list)
+    foreach(_source_file ${_full_sources_list})
+        if(_source_file MATCHES [=[^([A-Z]:)?/.*$]=])
+            set(_full_source_paths "${_source_file}")
         else()
-            set(FULL_SOURCE_PATH "${TARGET_DIR}/${SOURCE_FILE}")
+            set(_full_source_paths "${_target_dir}/${_source_file}")
         endif()
-        file(RELATIVE_PATH REL_PATH "${CMAKE_SOURCE_DIR}" "${FULL_SOURCE_PATH}")
+        file(RELATIVE_PATH _rel_path "${CMAKE_SOURCE_DIR}" "${_full_source_paths}")
 
-        set(FULL_TOUCH_PATH "${CMAKE_BINARY_DIR}/${REL_PATH}.format.touch")
-        get_filename_component(TOUCH_DIR "${FULL_TOUCH_PATH}" DIRECTORY)
+        set(_full_touch_path "${CMAKE_BINARY_DIR}/${_rel_path}.format.touch")
+        get_filename_component(_touch_dir "${_full_touch_path}" DIRECTORY)
         list(APPEND TOUCH_PATHS "${FULL_TOUCH_PATH}")
 
-        file(MAKE_DIRECTORY "${TOUCH_DIR}")
+        file(MAKE_DIRECTORY "${_touch_dir}")
         add_custom_command(
             OUTPUT "${FULL_TOUCH_PATH}"
-            COMMAND "${CLANG_FORMAT_PROGRAM}" -i -style=file "${SOURCE_FILE}"
+            COMMAND "${CLANG_FORMAT_PROGRAM}" -i -style=file "${_source_file}"
             COMMAND "${CMAKE_COMMAND}" -E touch "${FULL_TOUCH_PATH}"
-            DEPENDS "${FULL_SOURCE_PATH}" ${CLANG_FORMAT_PATHS}
-            COMMENT "${SOURCE_FILE}"
+            DEPENDS "${_full_source_paths}" ${CLANG_FORMAT_PATHS}
+            COMMENT "${_source_file}"
             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         )
     endforeach()
 
-    add_custom_target(${TARGET}-format VERBATIM DEPENDS ${TOUCH_PATHS})
+    add_custom_target(${_target}-format VERBATIM DEPENDS ${TOUCH_PATHS})
     add_custom_target(
-        ${TARGET}-reformat VERBATIM 
+        ${_target}-reformat VERBATIM 
         COMMAND "${CMAKE_COMMAND}" -E remove ${TOUCH_PATHS}
         COMMENT "Clearing format dependencies"
     )
-    set_target_properties(${TARGET}-format PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD True FOLDER CMakePredefinedTargets/format)
-    set_target_properties(${TARGET}-reformat PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD True FOLDER CMakePredefinedTargets/reformat)
+    set_target_properties(${_target}-format PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD True FOLDER CMakePredefinedTargets/format)
+    set_target_properties(${_target}-reformat PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD True FOLDER CMakePredefinedTargets/reformat)
 
-    add_dependencies(format ${TARGET}-format)
-    add_dependencies(reformat ${TARGET}-reformat)
+    add_dependencies(format ${_target}-format)
+    add_dependencies(reformat ${_target}-reformat)
 endfunction()
