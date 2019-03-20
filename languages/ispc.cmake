@@ -61,7 +61,7 @@ function(add_ispc_object_library target)
 		string(REPLACE "-x2" "" target_filename "${target_filename}")
 
 		# The `avx1` target's suffix is `avx`.
-		if(target MATCHES "avx1(-x2)?")
+		if(target MATCHES "avx1(-x2)?$")
 			set(target_filename "avx")
 		endif()
 
