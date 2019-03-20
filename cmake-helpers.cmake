@@ -13,3 +13,5 @@ include("${CMAKE_CURRENT_LIST_DIR}/utilities/include-target.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/utilities/os.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/utilities/remove-permissive.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/utilities/target-includes-system.cmake")
+
+include("${CMAKE_CURRENT_LIST_DIR}/languages/ispc.cmake")
