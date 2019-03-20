@@ -154,7 +154,7 @@ function(add_ispc_object_library target)
 		get_filename_component(basename "${file}" NAME)
 		get_filename_component(noextant "${file}" NAME_WE)
 		get_filename_component(dir "${file}" DIRECTORY)
-		file(RELATIVE_PATH relpath "${CMAKE_CURRENT_SOURCE_DIR}" "${dir}")
+		file(RELATIVE_PATH reldir "${CMAKE_CURRENT_SOURCE_DIR}" "${dir}")
 
 		if(basename MATCHES ".*\\.ispc")
 			# Mark source file as a header so cmake doesn't try to build it, but we can
@@ -163,7 +163,7 @@ function(add_ispc_object_library target)
 
 			# ISPC does many things with exact header/obj file names. These are some templates.
 			set(output_header_template "${CMAKE_CURRENT_BINARY_DIR}/ispc/include/${OPTION_HEADER_PATH}/${noextant}")
-			set(output_obj_folder "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${target}.dir/${relpath}")
+			set(output_obj_folder "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${target}.dir/${reldir}")
 			set(output_obj_template "${output_obj_folder}/${noextant}")
 
 			file(MAKE_DIRECTORY "${output_obj_folder}")
@@ -179,12 +179,14 @@ function(add_ispc_object_library target)
 				endforeach()
 			endif()
 
+			file(RELATIVE_PATH obj_display "${CMAKE_CURRENT_SOURCE_DIR}" "${output_obj_template}.o")
+
 			# Call ISPC
 			add_custom_command(
 				OUTPUT ${output_headers} ${output_objects}
 				COMMAND ${ISPC_PATH} ${arguments} -o "${output_obj_template}.o" -h "${output_header_template}.h" "${file}"
 				DEPENDS "${file}"
-				COMMENT "Building ISPC object ${output_obj_template}.o"
+				COMMENT "Building ISPC object ${obj_display}"
 				VERBATIM
 			)
 
