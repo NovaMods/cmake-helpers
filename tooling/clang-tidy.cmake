@@ -1,7 +1,4 @@
-if(MSVC)
-    message(STATUS "Windows detected, disabling linting.")
-    return()
-endif()
+
 
 set(_clang_tidy_cmake_list_dir ${CMAKE_CURRENT_LIST_DIR})
 
@@ -26,11 +23,14 @@ if(NOT CLANG_APPLY_REPLACEMENTS_COMMAND)
 endif()
 
 find_program(CLANG_TIDY_PROGRAM NAMES ${CLANG_TIDY_COMMAND})
-if(NOT CLANG_TIDY_PROGRAM)
+if((NOT CLANG_TIDY_PROGRAM) OR OS_WINDOWS)
     message(STATUS "clang-tidy not found")
-    # function(lint)
-    #     # no-op
-    # endfunction()
+    function(lint)
+        # no-op
+    endfunction()
+    function(enable_linting)
+    	# no-op
+    endfunction()
     return()
 endif()
 
