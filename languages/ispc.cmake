@@ -23,6 +23,13 @@ function(add_ispc_object_library target)
 	set(multi_value_args FLAGS INCLUDE_DIRS TARGETS)
 	cmake_parse_arguments(OPTION "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN} )
 
+	# Object file extension
+	if(OS_WINDOWS)
+		set(obj_ext "obj")
+	else()
+		set(obj_ext "o")
+	endif()
+
 	# For readability
 	set(sources ${OPTION_UNPARSED_ARGUMENTS})
 
@@ -170,21 +177,21 @@ function(add_ispc_object_library target)
 
 			# Ensure that the non-suffixed file is added.
 			set(output_headers "${output_header_template}.h")
-			set(output_objects "${output_obj_template}.o")
+			set(output_objects "${output_obj_template}.${obj_ext}")
 			# Add all suffixed files (only generated if targeting more than one target)
 			if(target_count GREATER_EQUAL 2)
 				foreach(name ${target_filenames})
 					list(APPEND output_headers "${output_header_template}_${name}.h")
-					list(APPEND output_objects "${output_obj_template}_${name}.o")
+					list(APPEND output_objects "${output_obj_template}_${name}.${obj_ext}")
 				endforeach()
 			endif()
 
-			file(RELATIVE_PATH obj_display "${CMAKE_CURRENT_SOURCE_DIR}" "${output_obj_template}.o")
+			file(RELATIVE_PATH obj_display "${CMAKE_CURRENT_SOURCE_DIR}" "${output_obj_template}.${obj_ext}")
 
 			# Call ISPC
 			add_custom_command(
 				OUTPUT ${output_headers} ${output_objects}
-				COMMAND ${ISPC_PATH} ${arguments} -o "${output_obj_template}.o" -h "${output_header_template}.h" "${file}"
+				COMMAND ${ISPC_PATH} ${arguments} -o "${output_obj_template}.${obj_ext}" -h "${output_header_template}.h" "${file}"
 				DEPENDS "${file}"
 				COMMENT "Building ISPC object ${obj_display}"
 				VERBATIM
