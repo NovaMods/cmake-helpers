@@ -128,7 +128,7 @@ function(add_ispc_object_library target)
 
 	# Debug symbols
 	if(CMAKE_CONFIGURATION_TYPES)
-		set(arguments "${arguments}" $<IF:$<OR:$<STREQUAL:$<CONFIG>,Debug>,$<STREQUAL:$<CONFIG>,RelWithDebInfo>>,-g,>)
+		set(arguments "${arguments}" $<IF:$<OR:$<STREQUAL:$<CONFIG>,Debug>,$<STREQUAL:$<CONFIG>,RelWithDebInfo>>,-g,-O3>)
 	elseif(CMAKE_BUILD_TYPE MATCHES "Debug|RelWithDebInfo")
 		set(arguments "${arguments}" "-g")
 	endif()
@@ -137,7 +137,7 @@ function(add_ispc_object_library target)
 	# Optimization
 	if(CMAKE_CONFIGURATION_TYPES)
 		set(arguments "${arguments}" "$<IF:$<STREQUAL:$<CONFIG>,Debug>,-O0,-O3>")
-		set(arguments "${arguments}" "$<IF:$<STREQUAL:$<CONFIG>,Debug>,-wno-perf,>")
+		set(arguments "${arguments}" "$<IF:$<STREQUAL:$<CONFIG>,Debug>,-wno-perf,-O3>")
 	elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 		set(arguments "${arguments}" "-O0" "-wno-perf")
 	elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
