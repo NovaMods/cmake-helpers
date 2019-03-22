@@ -40,7 +40,7 @@ function(add_ispc_object_library target)
 		"sse2"      "sse2-x2" 
 		"sse4"      "sse4-x2" 
 		"avx1"      "avx1-x2" 
-		"avx1.1"    "avx1.1x-2" 
+		"avx1.1"    "avx1.1-x2" 
 		"avx2"      "avx2-x2" 
 		"avx512knl"
 		"avx512skx"
