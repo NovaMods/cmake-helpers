@@ -1,4 +1,4 @@
-set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_CURRENT_LIST_DIR}/modules" "${CMAKE_CURRENT_LIST_DIR}/sanitizers")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/modules" "${CMAKE_CURRENT_LIST_DIR}/sanitizers")
 
 include("${CMAKE_CURRENT_LIST_DIR}/utilities/os.cmake")
 
