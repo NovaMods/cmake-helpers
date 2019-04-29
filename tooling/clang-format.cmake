@@ -19,7 +19,7 @@ endif()
 
 if(CLANG_FORMAT_TERMINATE)
     message(STATUS "Disabling formatting.")
-    function(format)
+    function(target_format)
         # no-op
     endfunction()
     return()
